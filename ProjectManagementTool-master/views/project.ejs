@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Project dashboard</title>
+ 
+</head>
+
+<body href="#page-top">
+  
+  <% var title='Project dashboard' %>
+  <% var name= project.name %>
+  <% var description=project.description %>
+
+  <% include header-template.ejs %>
+
+  <div class="container col-md-12">
+    <div class="row">
+      <div class="col-md-7">
+        <br>
+          <div class="container col-md-12">
+
+              <% if(sprints.length == 0) { %>
+                <br><h3> No sprints yet </h3> 
+               <% } %>
+              <% for(var i = 0; i < sprints.length; ) {%>
+                
+                  <div class="row" >
+
+                    <% for(var j = 0; j < 3 && i < sprints.length; ++j, ++i) {%>
+                    <% var url = "../sprint/"+sprints[i].sprint_id %>
+                    <div class="col-md-4">
+                        <a href=<%= url %>>
+                            <div class="card2 card-1">
+                                <br>
+                                  <h3><b><%=sprints[i].name%></b></h3>
+                                  <h4>status : <%=sprints[i].status%></h4>
+                                  <p><%=sprints[i].description%></p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <% } %>
+                </div>
+                <% } %>
+
+          </div>
+      </div>
+
+      <div class="col-md-1">        
+      </div>
+
+      <div class="col-md-4">
+
+          <div class="container col-md-12">
+              <div class="row">
+                <div class="col-md-11">
+
+                  <h3><b><u> Project Analytics</u></b></h3>
+                  <canvas id="canvas1" width="300" height="300"></canvas><br />
+                  
+                  <button type="button" class="btn btn-primary btn-lg menuButtons" data-toggle="modal" data-target="#sprintModal">Create Sprint</button>
+                  
+                  <button type="button" class="btn btn-primary btn-lg menuButtons" data-toggle="modal" data-target="#memberModal">Add new member</button>                  
+          
+                  <button type="button" class="btn btn-primary btn-lg menuButtons" data-toggle="modal" data-target="#projectModal">Update Project information </button>
+                  
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                <!--Html code for comments-->
+                            <div class="detailBox">
+                              <div class="titleBox">
+                                <label>Comments thread</label>
+                                
+                              </div>
+                              <div class="commentBox">
+                            
+                                
+                                <div class="actionBox">
+                                  <ul class="commentList">
+
+                                      <% for(var i = 0; i < project.comments.length; i++) {%>
+                                    <li>
+                                      <div class="commenterImage">
+                                        <img src="/images/blank-profile.png" />
+                                      </div>
+                                      <div class="commentText">
+                                        <p class=""><%= project.comments[i].content %></p>
+                                        <span class="date sub-text"><%= project.comments[i].userName %> </span>
+                            
+                                      </div>
+                                    </li>
+                                      <% } %>
+                            
+                                    
+                                  </ul>
+                                                                    
+                                  <form class="form-inline" role="form" method="POST" id="commentsForm">
+                                    <div class="form-group">
+                                      <input class="form-control" type="text" placeholder="Your comments" name="content" id="comment"/>
+                                    </div>
+                                    <div class="form-group">
+                                      <button type="submit" class="btn btn-default">Add</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Modal for adding new team member -->
+    <div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin:15px 15px;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="panel-heading">
+            <div class="font-effect-shadow-multiple heading">Add Member</div>
+          </div>
+          <hr>
+          <% var url1 = "/project/"+project.project_id+"/AddMember" %>
+            <form name="memberForm" class="form-signin" role="form" method="post" action="<%=url1%>" id="memberForm">
+
+
+              <label>New Member</label>
+              <input type="text" class="form-control" name="member" id="member" placeholder="Email ID" required>
+
+              <div class="submitButton">
+                <button type="submit" class="btn btn-primary btn-lg">Add</button>
+              </div>
+            </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Creating sprint -->
+  <div class="modal fade" id="sprintModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin:15px 15px;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="panel-heading">
+            <div class="font-effect-shadow-multiple heading">Create Sprint</div>
+          </div>
+          <hr>
+          <% var url2 = "/project/"+project.project_id+"/AddSprint" %>
+            <form name="sprintForm" class="form-signin" role="form" method="post" action="<%=url2%>" id="sprintForm">
+
+
+              <label>Name</label>
+              <input type="text" class="form-control" name="name" required>
+              <br />
+
+
+              <label>Sprint description</label>
+              <textarea class="form-control" rows="3" name="description" required></textarea>
+              <br />
+
+              <div class="container col-md-12">
+                <div class="row">
+
+                  <div class="col-md-5">
+                    <label for="startDate">Start Date:</label>
+                    <input class="form-control" type="date" name="startDate" id="startDate" required>
+                  </div>
+
+                  <div class="col-md-2">
+
+                  </div>
+
+                  <div class="col-md-5">
+                    <label for="endDate">End Date:</label>
+                    <input class="form-control" type="date" name="endDate" id="endDate" required>
+                    <br />
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="submitButton">
+                <button type="submit" class="btn btn-primary btn-lg">Create Sprint</button>
+              </div>
+            </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal to update project -->
+  <div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin:15px 15px;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="panel-heading">
+            <div class="font-effect-shadow-multiple heading">Update Project</div>
+          </div>
+          <hr>
+
+          <% var url3 = "/project/"+project.project_id+"/UpdateProject" %>
+          <form name="projectForm" class="form-signin" role="form" action="<%= url3 %>" method="post" id="projectForm">
+
+
+
+            <label>Name</label>
+            <input type="text" class="form-control" name="name" value="<%= project.name %>" required>
+            <br />
+
+
+            <label>Description:</label>
+            <textarea class="form-control" rows="5" name="description" required><%= project.description %></textarea>
+            <br />
+
+            <label>Members</label>
+
+            <input type="text" class="form-control" name="member" id="members" value="<%= project.members %>">
+            <br />
+
+
+            <div class="container col-md-12">
+              <div class="row">
+
+                <div class="col-md-5">
+
+                  
+                  <label for="startDate">Start Date:</label>
+                  <input class="form-control" type="date" name="startDate" id="project_startDate"  required>
+                </div>
+
+                <div class="col-md-2">
+
+                </div>
+
+
+                <div class="col-md-5">
+
+                  <label for="endDate">End Date:</label>
+                  <input class="form-control" type="date" name="endDate" id="project_endDate" required>
+                  <br />
+                </div>
+              </div>
+            </div>
+
+
+            <div class="submitButton">
+              <button type="submit" class="btn btn-primary btn-lg">Update Project</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <% var statusIDS = [] 
+  for(var i = 0; i < sprints.length; ++i) {
+  var url = "../sprint/"+sprints[i].sprint_id 
+  statusIDS.push(sprints[i].status) 
+  }
+  for(var i = 0; i < statusIDS.length; ++i) {
+ if(statusIDS[i] === "To-do") statusIDS[i] = 0 
+ if(statusIDS[i] === "In-progress") statusIDS[i] = 50 
+ if(statusIDS[i] === "Completed") statusIDS[i] = 100 
+ }
+  var max= statusIDS.length *100
+  var sum = 0
+  for(var i = 0; i < statusIDS.length; ++i) {
+  sum = sum + statusIDS[i];
+ }
+  per= (sum * 100)/max %>
+
+  <h5 id="per" style="visibility: hidden;"><%= per%></h5>
+
+  <script src="/javascripts/analytics.js"></script>
+  
+  <script>
+    $(document).ready(function () {
+
+      let start_date = new Date('<%- project.start_date %>').toISOString().substr(0, 10);
+      let end_date = new Date('<%- project.end_date %>').toISOString().substr(0, 10);
+      document.querySelector("#projectForm #project_startDate").value = start_date;
+      document.querySelector("#projectForm #project_endDate").value = end_date;
+
+      var commentURL = "/project/"+ '<%- project.project_id %>' + "/AddProjectComment";
+
+      //Ajax Call ~~~~~
+      $('#commentsForm').on('submit', function (event) {
+        event.preventDefault(); // Stop the form from causing a page refresh.
+        var data = {
+          content: $('#comment').val()
+        };
+
+        $.ajax({
+          url: commentURL,
+          data: data,
+          method: 'POST'
+        }).then(function (response) {
+          $(".commentList").append(response);
+          $('#comment').val(''); 
+          console.log("comment added");
+        });
+      });
+
+      // Anaytics function call
+      var canvasx = document.getElementById('canvas1');
+      progressBar(canvasx.id);
+      
+      function validateMember() {
+
+        var m = document.getElementById("member").value;
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var flag = re.test(String(m).toLowerCase());
+
+        return flag;
+      }
+
+      $("#endDate").change(function () {
+        var startDate = document.getElementById("startDate").value;
+        var endDate = document.getElementById("endDate").value;
+
+        if ((Date.parse(endDate) <= Date.parse(startDate))) {
+          alert("End date should be greater than Start date");
+          document.getElementById("endDate").value = "";
+        }
+      });
+
+      $("#project_endDate").change(function () {
+        var startDate = document.getElementById("project_startDate").value;
+        var endDate = document.getElementById("project_endDate").value;
+
+        if ((Date.parse(endDate) <= Date.parse(startDate))) {
+          alert("End date should be greater than Start date");
+          document.getElementById("project_endDate").value = end_date;
+        }
+      });
+
+      $('#memberForm').submit(function (e) {
+        if (!validateMember()) {
+          alert("Enter a valid email address");
+          e.preventDefault();
+        }
+        //alert("hello");
+      });
+
+      function validateMultipleMembers() {
+        var members = document.getElementById("members").value;
+        if(members == "")
+          return true;
+        var list = members.split(',');
+        for (var index in list) {
+          var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          var flag = re.test(String(list[index]).toLowerCase());
+          if (flag == false)
+            return false;
+        }
+        return true;
+      }
+
+      $('#projectForm').submit(function (e) {
+        if(!validateMultipleMembers()){
+          alert("Enter valid email ids' separated by ,")
+          e.preventDefault();
+        }
+       //alert("hello");
+      });
+
+    });
+  </script>
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+      Profile
+  </title>
+
+</head>
+
+<body style='background-color:#f0f0f0'>
+
+    <% var title='Welcome ' %>
+    <% var name= user.name %>
+    <% var description= user.description %>
+  
+    <% include header-template.ejs %>
+
+    <!-- <div class="panel-heading" paddiing-top="10px"> -->
+      <div class="container col-md-12">
+            <div class="row" >
+
+              <div class="col-md-3">
+                
+              </div>
+              <div class="col-md-6">
+                  <div id="profilehead" class="font-effect-shadow-multiple heading">MY PROJECTS</div>
+              </div>
+              <div class="col-md-3">
+                <button type="button" class="btn btn-primary btn-lg menuButtons" data-toggle="modal" data-target="#projectModal">New project</button>
+                <button type="button" class="btn btn-primary btn-lg menuButtons" data-toggle="modal" data-target="#userModal">Edit profile</button>
+              </div>
+            </div>
+          <br>
+          <br>
+
+            <br>
+          <% if(projects.length == 0) { %>
+            <h3> Not involved in any projects yet </h3> 
+           <% } %>
+          <% for(var i = 0; i < projects.length; ) {%>
+          
+            <div class="row" >
+
+              <% for(var j = 0; j < 3 && i < projects.length; ++j, ++i) {%>
+                <% var url = "../project/"+projects[i].project_id %>
+              <div class="col-md-4">
+                  <a href=<%= url %>>
+                  <div class="card card-1">
+                    <br>
+                      <h3><b><%=projects[i].name%></b></h3>
+                      <h4>Lead: <%=projects[i].lead%></h4>
+                      <p><%=projects[i].description%></p>
+                  </div>
+                  </a>
+              </div>
+
+              <% } %>
+          </div>
+          <% } %>
+
+      </div>
+
+  
+  <!-- Modal for create project -->
+  <div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" >
+
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin:15px 15px;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="panel-heading">
+            <div class="font-effect-shadow-multiple heading">New Project</div>
+          </div>
+          <hr>
+
+          <form name="projectForm" class="form-signin" role="form" action="profile/InsertProject" method="post" id="projectForm">
+
+            <label>Name</label>
+            <input type="text" class="form-control" name="name" required >
+            <br />
+
+
+            <label>Project description</label>
+            <textarea class="form-control" rows="5" name="description" required ></textarea>
+            <br />
+
+            <label>Add Team members</label>&nbsp;&nbsp;&nbsp;
+
+            <button type="button" class="btn btn-default add" aria-label="Left Align"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </button> &nbsp;
+            <button type="button" class="btn btn-default remove" aria-label="Left Align"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button>
+            
+            <div class="membersClass">
+            <input type="text" class="form-control memberItem">
+            </div>
+            
+            <input type="text" style="display: none;" name="member" id="members"/>
+            <!-- <input type="text" class="form-control" name="member" id="members"> -->
+            <br />
+            <div class="container col-md-12">
+              <div class="row">
+
+                <div class="col-md-5">
+
+                  <label for="startDate">Start Date:</label>
+                  <input class="form-control" type="date" name="startDate" id="startDate" required>
+                </div>
+
+                <div class="col-md-2"></div>
+
+                <div class="col-md-5">
+
+                  <label for="endDate">End Date:</label>
+                  <input class="form-control" type="date" name="endDate" id="endDate" required>
+                  <br />
+                </div>
+              </div>
+            </div>
+
+
+            <div class="submitButton">
+              <button type="submit" class="btn btn-primary btn-lg">Create Project</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for update profile -->
+  <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+  
+          <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin:15px 15px;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="panel-heading">
+              <div class="font-effect-shadow-multiple heading">Update me</div>
+            </div>
+            <hr>
+  
+  
+            <form name="userForm" class="form-signin" role="form" action="profile/UpdateUser" method="post" id="userForm">
+  
+  
+  
+              <label>Name</label>
+              <input type="text" class="form-control" name="name" value="<%= user.name %>" required >
+              <br />
+  
+              <label>University</label>
+              <input type="text" class="form-control" name="name" value="<%= user.university %>" required >
+              <br />
+  
+              <label>Description</label>
+              <textarea class="form-control" rows="4" name="description" required ><%= user.description %></textarea>
+              <br />  
+              
+              <!-- <input type="text" class="form-control" name="member" id="members"> -->
+  
+              <div class="submitButton">
+                <button type="submit" class="btn btn-primary btn-lg">Update my profile</button>
+              </div>
+            </form>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+
+
+
+
+  <!-- JQuery scripting for modal bootstrap-->
+
+  <script>
+    $(document).ready(function () {
+
+      $(".add").click(function(){
+        $(".membersClass").append('<input type="text" class="form-control memberItem">');
+    });
+
+    $(".remove").click(function(){
+      var parent = $(".membersClass");
+    	if($(parent).children().length > 1)
+    		$(parent).children().last().remove();
+    });
+
+      function validateMember() {
+        var members = document.getElementById("members").value;
+        var list = members.split(',');
+        for (var index in list) {
+          var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          var flag = re.test(String(list[index]).toLowerCase());
+          if (flag == false)
+            return false;
+        }
+        return true;
+      }
+
+      $("#endDate").change(function () {
+        var startDate = document.getElementById("startDate").value;
+        var endDate = document.getElementById("endDate").value;
+        if ((Date.parse(endDate) <= Date.parse(startDate))) {
+          alert("End date should be greater than Start date");
+          document.getElementById("endDate").value = "";
+        }
+      });
+      
+      $('#projectForm').submit(function (e) {
+        var m = "";
+        $('.membersClass').children().each(function () {
+          m += this.value + ",";
+        });
+        
+        $('#members').val(m.substring(0, m.length-1));
+
+        if(!validateMember()){
+          alert("Enter valid email ID")
+          e.preventDefault();
+        }
+       
+       //alert("hello");
+      });
+      
+    });
+  </script>
+
+
+</body>
+
+</html>

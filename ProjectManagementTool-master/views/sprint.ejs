@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sprint dashboard</title>
+
+</head>
+
+<body>
+
+
+  <% var title='Sprint dashboard' %>
+  <% var name= sprint.name %>
+  <% var description=sprint.description %>
+
+  <% include header-template.ejs %>
+      <div class="container col-md-12">
+          <div class="row">
+
+            <div class="col-md-8">
+              <% if(tasks.length == 0) { %>
+                 <br><h3> No Tasks yet </h3> 
+                <% } %>
+                <div class="container col-md-12">
+                    <% for(var i = 0; i < tasks.length; ) {%>
+                    
+                      <div class="row" >
+
+                        <% for(var j = 0; j < 3 && i < tasks.length; ++j, ++i) {%>
+                        <% var url = "../task/"+tasks[i].task_id %>
+                        <div class="col-md-4">
+                            <a href=<%= url %>>
+                            <div class="box effect1">
+                              <br>
+                                <h3><%=tasks[i].name%></h3>
+                                <h4 style='color: green;'>Status: <%=tasks[i].status%></h4>
+                            </div>
+                            </a>
+                        </div>
+
+                        <% } %>
+                    </div>
+                    <% } %>
+
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="container col-md-12">
+                    <div class="row">
+                      <div class="col-md-11">
+
+                        <h3><b><u> Sprint Analytics</u></b></h3>
+                        <canvas id="canvas1" width="300" height="300"></canvas>
+
+                        <button type="button" class="btn btn-primary btn-lg menuButtons" data-toggle="modal" data-target="#sprintModal">Update Sprint information</button>
+
+                        <button type="button" class="btn btn-primary btn-lg  menuButtons" data-toggle="modal" data-target="#taskModal">Create Task</button>
+                
+                        <% var backURL = "../project/"+project.project_id %>
+                        <a href="<%= backURL %>">
+                        <button type="button" class="btn btn-primary btn-lg menuButtons"><span class="glyphicon glyphicon-chevron-left"></span> Project Dashboard </button> 
+                        </a>
+                        
+                        
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12">
+                      <!--Html code for comments-->
+                                  <div class="detailBox">
+                                    <div class="titleBox">
+                                      <label>Comments thread</label>
+                                      
+                                    </div>
+                                    <div class="commentBox">
+                                  
+                                      
+                                      <div class="actionBox">
+                                        <ul class="commentList">
+
+                                            <% for(var i = 0; i < sprint.comments.length; i++) {%>
+                                          <li>
+                                            <div class="commenterImage">
+                                              <img src="/images/blank-profile.png" />
+                                            </div>
+                                            <div class="commentText">
+                                              <p class=""><%= sprint.comments[i].content %></p>
+                                              <span class="date sub-text"><%= sprint.comments[i].userName %> </span>
+                                  
+                                            </div>
+                                          </li>
+                                            <% } %>
+                                  
+                                          
+                                        </ul>
+                                        <% var urlcomment = "/sprint/"+sprint.sprint_id+"/AddSprintComment" %>
+                                        
+                                        <form class="form-inline" role="form" method="POST" id="commentsForm">
+                                          <div class="form-group">
+                                            <input class="form-control" type="text" placeholder="Your comments" name="content" id="comment"/>
+                                          </div>
+                                          <div class="form-group">
+                                            <button type="submit" class="btn btn-default">Add</button>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+          </div>
+        </div>
+
+  
+
+<!-- Create Task MODAL -->
+
+  <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin:15px 15px;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="panel-heading">
+            <div class="font-effect-shadow-multiple heading">Create Task</div>
+          </div>
+          <hr>
+          <% var url1 = "/sprint/"+sprint.sprint_id+"/AddTask" %>
+          <form name="taskForm" class="form-signin" role="form" method="post" action="<%= url1 %>" id="taskForm">
+
+
+            <label>Name</label>
+            <input type="text" class="form-control" name="name" required>
+            <br />
+
+            <label>Assigned to</label>
+            <select class="form-control" id="dropdown" name="assignee">
+                <option>No one yet</option>
+                <% for(var i = 0; i < project.members.length; ++i) {%>
+                  <option><%= project.members[i] %></option>
+                  <% } %>
+                </select>
+
+
+            <label>Task description</label>
+            <textarea class="form-control" rows="4" name="description" required></textarea>
+            <br />
+
+            <div class="container col-md-12">
+              <div class="row">
+
+                <div class="col-md-5">
+                  <label for="startDate">Start Date:</label>
+                  <input class="form-control" type="date" id="startDate" name="startDate" required>
+                </div>
+
+                <div class="col-md-2">
+
+                </div>
+
+
+                <div class="col-md-5">
+                  <label for="endDate">End Date:</label>
+                  <input class="form-control" type="date" id="endDate" name="endDate" required>
+                  <br />
+                </div>
+              </div>
+            </div>
+
+
+            <div class="submitButton">
+              <button type="submit" class="btn btn-primary btn-lg">Create Task</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Update Sprint Modal -->
+  <div class="modal fade" id="sprintModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin:15px 15px;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="panel-heading">
+            <div class="font-effect-shadow-multiple heading">Update Sprint</div>
+          </div>
+          <hr>
+          <% var url2 = "/sprint/"+sprint.sprint_id+"/UpdateSprint" %>
+            <form name="sprintForm" class="form-signin" role="form" method="post" action="<%=url2%>" id="sprintForm">
+
+
+              <label>Name</label>
+              <input type="text" class="form-control" name="name" value="<%= sprint.name %>" required>
+              <br />
+
+
+              <label>Description:</label>
+              <textarea class="form-control" rows="5" name="description" required><%= sprint.description %></textarea>
+              <br />
+
+              <label>Sprint status</label>
+              <select class="form-control" id="dropdown_status" name="status">
+                  <option value='To-do'>To-do</option>
+                  <option value='In-progress'>In-progress </option>
+                  <option value='Completed'>Completed</option>
+                  </select>
+
+                  <br />
+
+              <div class="container col-md-12">
+                <div class="row">
+
+                  <div class="col-md-5">
+                    <label for="startDate">Start Date:</label>
+                    <input class="form-control" type="date" name="startDate" id="sprint_startDate" required>
+                  </div>
+
+                  <div class="col-md-2">
+
+                  </div>
+
+
+                  <div class="col-md-5">
+                    <label for="endDate">End Date:</label>
+                    <input class="form-control" type="date" name="endDate" id="sprint_endDate" required>
+                    <br />
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="submitButton">
+                <button type="submit" class="btn btn-primary btn-lg">Update Sprint</button>
+              </div>
+            </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+        
+
+  <script>
+    $(document).ready(function () {
+
+      let start_date = new Date('<%- sprint.start_date %>').toISOString().substr(0, 10);
+      let end_date = new Date('<%- sprint.end_date %>').toISOString().substr(0, 10);
+      document.querySelector("#sprintForm #sprint_startDate").value = start_date;
+      document.querySelector("#sprintForm #sprint_endDate").value = end_date;
+
+      $("#dropdown_status").val('<%- sprint.status %>');
+
+      var commentURL = "/sprint/"+ '<%- sprint.sprint_id %>' + "/AddSprintComment";
+
+      //Ajax Call ~~~~~
+      $('#commentsForm').on('submit', function (event) {
+        event.preventDefault(); // Stop the form from causing a page refresh.
+        var data = {
+          content: $('#comment').val()
+        };
+
+        $.ajax({
+          url: commentURL,
+          data: data,
+          method: 'POST'
+        }).then(function (response) {
+          $(".commentList").append(response);
+          $('#comment').val(''); 
+          console.log("comment added");
+        });
+      });
+
+      // Anaytics function call
+      var canvasx = document.getElementById('canvas1');
+      progressBar(canvasx.id);
+
+      $("#endDate").change(function () {
+        var startDate = document.getElementById("startDate").value;
+        var endDate = document.getElementById("endDate").value;
+
+        if ((Date.parse(endDate) <= Date.parse(startDate))) {
+          alert("End date should be greater than Start date");
+          document.getElementById("endDate").value = "";
+        }
+      });
+    });
+  </script>
+
+<!--Circular progress bar-->
+  <% var statusIDS = [] 
+   for(var i = 0; i < tasks.length; ++i) {
+   var url = "../task/"+tasks[i].task_id 
+   statusIDS.push(tasks[i].status) 
+   } %>
+
+  <% for(var i = 0; i < statusIDS.length; ++i) {
+  if(statusIDS[i] === "To-do") statusIDS[i] = 0 
+  if(statusIDS[i] === "In-progress") statusIDS[i] = 50 
+  if(statusIDS[i] === "Completed") statusIDS[i] = 100 
+  }
+   var max= statusIDS.length *100 
+   var sum = 0 
+   for(var i = 0; i < statusIDS.length; ++i) {
+   sum = sum + statusIDS[i];
+  }
+   per = (sum * 100)/max %>
+
+  <h5 id="per" style="visibility: hidden;"><%= per%></h5> 
+
+  <script src="/javascripts/analytics.js"></script>
+  
+</body>
+
+</html>

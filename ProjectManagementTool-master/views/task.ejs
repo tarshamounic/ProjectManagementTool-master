@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Task dashboard</title>
+
+</head>
+
+<body>
+
+  <% var title='Task dashboard' %>
+  <% var name= task.name %>
+  <% var description = task.description %>
+
+  <% include header-template.ejs %>
+
+  
+
+  <div class="container col-md-12">
+    <div class="row">
+
+      <div class="col-md-6">
+        <div class="container">
+
+          <div class="row" style="margin-top:25px;">
+            <div = class="col-md-2">
+                <% var backURL = "../sprint/"+sprint.sprint_id %>
+                <a href="<%= backURL %>">
+                <button type="button" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-chevron-left"></span> Sprint Dashboard </button> 
+                </a>
+            </div>
+            <div = class="col-md-8">
+              <h3 id="startID"> </h3>
+              <h3 id="endID"> </h3>
+              <h3 id="assignID"> </h3>
+              <h3 id="statusID"> </h3>
+
+            </div>
+            <div = class="col-md-2"></div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-12">
+              <!--Html code for comments-->
+                          <div class="detailBox">
+                            <div class="titleBox">
+                              <label>Comments thread</label>
+                              
+                            </div>
+                            <div class="commentBox">
+                          
+                              
+                              <div class="actionBox">
+                                <ul class="commentList">
+        
+                                    <% for(var i = 0; i < task.comments.length; i++) {%>
+                                  <li>
+                                    <div class="commenterImage">
+                                      <img src="/images/blank-profile.png" />
+                                    </div>
+                                    <div class="commentText">
+                                      <p class=""><%= task.comments[i].content %></p>
+                                      <span class="date sub-text"><%= task.comments[i].userName %> </span>
+                          
+                                    </div>
+                                  </li>
+                                    <% } %>
+                          
+                                  
+                                </ul>
+                                <% var urlcomment = "/task/"+task.task_id+"/addTaskComment" %>
+                                                                
+                                <form class="form-inline" role="form" method="POST" id="commentsForm">
+                                  <div class="form-group" >
+                                    <input class="form-control" type="text" placeholder="Your comments" name="content" style="width:80%;" id="comment"/>
+                                  </div>
+                                  <div class="form-group">
+                                    <button type="submit" class="btn btn-default">Add</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                </div>
+            </div>
+
+        </div>
+          
+      </div>
+
+      <div class="col-md-1">
+        
+      </div>
+
+      <div class="col-md-4" style="padding:0px 55px;">
+        <h3 > <u> <b> Update the task </b> </u></h3>
+          <% var url1 = "/task/"+task.task_id+"/EditTask" %>
+          <form name="taskForm" class="form-signin" role="form" method="post" action="<%= url1 %>" id="taskForm" >
+
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Name </label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" name="name" id="name" value="<%= task.name %>" required>
+                  </div>
+            </div>
+
+            <br/>
+            <br/>
+
+            <div class="form-group">
+                <label for="dropdown_status" class="col-sm-3 control-label"> Task status </label>
+                <div class="col-sm-9">
+                    <select class="form-control" name="status" id="dropdown_status">
+                        <option value='To-do'>To-do</option>
+                        <option value='In-progress'>In-progress </option>
+                        <option value='Completed'>Completed</option>
+                    </select>
+                  </div>
+            </div>
+
+            <br/>
+            <br/>
+
+            <div class="form-group">
+                <label for="dropdown_assignee" class="col-sm-3 control-label"> Assigned to </label>
+                <div class="col-sm-9">
+                    <select class="form-control" name="assignee" id="dropdown_assignee">
+                        <option value='No one'>No one yet</option>
+                        <% for(var i = 0; i < project.members.length; ++i) { %>
+                          <option value='<%= project.members[i] %>'><%= project.members[i] %></option>
+                        <% } %>
+                        
+                    </select>
+                  </div>
+            </div>
+
+            <br/>
+            <br/>
+
+
+            <label>Description:</label>
+            <textarea class="form-control" rows="4" name="description" required><%= task.description %></textarea>
+            <br />
+
+            <div class="container col-md-12">
+              <div class="row">
+
+                <div class="col-md-5">
+                  <label for="startDate">Start Date:</label>
+                  <input class="form-control" type="date" id="startDate" name="startDate" required>
+                </div>
+
+                <div class="col-md-2">
+
+                </div>
+
+
+                <div class="col-md-5">
+                  <label for="endDate">End Date:</label>
+                  <input class="form-control" type="date" id="endDate" name="endDate" required>
+                  <br />
+                </div>
+              </div>
+            </div>
+
+
+            <div class="submitButton">
+              <button type="submit" class="btn btn-primary btn-lg">Update Task</button>
+            </div>
+          </form>
+         
+
+      </div>
+      <div class="col-md-1">
+      </div>
+
+    </div>
+  </div>
+  
+
+  <script>
+    $(document).ready(function () {
+
+      let start_date = new Date('<%- task.start_date %>').toISOString().substr(0, 10);
+      let end_date = new Date('<%- task.end_date %>').toISOString().substr(0, 10);
+      document.querySelector("#startDate").value = start_date;
+      document.querySelector("#endDate").value = end_date;
+
+      document.getElementById("startID").innerHTML = "<u>Start date:</u> "+start_date;
+      document.getElementById("endID").innerHTML = "<u>End date:</u> "+end_date;
+
+      $("#dropdown_status").val('<%- task.status %>');
+
+      if('<%- task.assignee %>' != ""){
+        $("#dropdown_assignee").val('<%- task.assignee %>');
+        document.getElementById("assignID").innerHTML = "<u>Assigned to:</u> "+'<%- task.assignee %>';
+      }
+      else{
+        document.getElementById("assignID").innerHTML = "<u>Assigned to:</u> No one";
+      }
+      document.getElementById("statusID").innerHTML = "<u>Current task status:</u> "+'<%- task.status %>';
+    
+
+      var commentURL = "/task/"+ '<%- task.task_id %>' + "/addTaskComment";
+
+      //Ajax Call ~~~~~
+      $('#commentsForm').on('submit', function (event) {
+        event.preventDefault(); // Stop the form from causing a page refresh.
+        var data = {
+          content: $('#comment').val()
+        };
+
+        $.ajax({
+          url: commentURL,
+          data: data,
+          method: 'POST'
+        }).then(function (response) {
+          $(".commentList").append(response);
+          $('#comment').val(''); 
+          console.log("comment added");
+        });
+      });
+
+
+      $("#endDate").change(function () {
+        var startDate = document.getElementById("startDate").value;
+        var endDate = document.getElementById("endDate").value;
+
+        if ((Date.parse(endDate) <= Date.parse(startDate))) {
+          alert("End date should be greater than Start date");
+          document.getElementById("endDate").value = "";
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

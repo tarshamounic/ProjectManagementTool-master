@@ -1,0 +1,243 @@
+
+
+
+a {
+  color: #00B7FF;
+}
+
+.modal-body{
+  padding: 10px 50px;
+}
+#profilehead{
+  padding-top: 60px;
+}
+hr{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	clear: both;
+	border: 0;
+	height: 1px;
+	background-image: -webkit-linear-gradient(left,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.15),rgba(0, 0, 0, 0));
+	background-image: -moz-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+	background-image: -ms-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+	background-image: -o-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+}
+
+/*
+.loginButton{
+  /* margin-left: 33%; 
+  padding: 10px 70px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+*/
+
+.heading{
+  font-family: 'Gugi', cursive;
+  font-size: 54px;
+  text-align: center;
+  margin-top: 25px;
+}
+
+.form-signin{
+  margin: 60px 28px;
+}
+
+.submitButton{
+  text-align: center;
+  margin-top: 40px;
+}
+
+.membersClass{
+  width:70%;
+}
+
+.memberItem{
+  margin-top:7px;
+  margin-bottom: 5px;
+}
+/*
+.fancy {
+  position: relative;
+  background-color: #C7D9AF;
+  padding: 2rem;
+  text-align: center;
+  max-width: 400px;
+  height: 150px;
+}
+
+.fancy::before {
+  content: "";
+
+  position : absolute;
+  z-index  : -1;
+  bottom   : 15px;
+  right    : 5px;
+  width    : 50%;
+  top      : 80%;
+  max-width: 200px;
+
+  box-shadow: 0px 13px 10px black;
+  transform: rotate(4deg);
+}
+*/
+
+.fancy2 {
+  position: relative;
+  background-color: #CCEEFF;
+  padding: 2rem;
+  text-align: center;
+  max-width: 400px;
+  height: 150px;
+}
+
+.fancy2::before {
+  content: "";
+
+  position : absolute;
+  z-index  : -1;
+  bottom   : 15px;
+  right    : 5px;
+  width    : 50%;
+  top      : 80%;
+  max-width: 200px;
+
+  box-shadow: 0px 13px 10px black;
+  transform: rotate(4deg);
+}
+
+/*
+.container2 >div {
+  flex: 1; 
+  margin-left:20px;
+  margin-top:20px; 
+  background-color:#C2C2A3;
+  height:180px;
+  width: 400px;
+  border: 8px solid rgb(21, 4, 61);
+  padding: 15px;
+  font-family:cursive;
+  font-size:20px;
+  line-height:2;
+  flex-grow: 4;
+}*/
+.container3 {
+  display: flex;
+  flex-direction: column;
+  }
+.container3 >div {
+  flex: 1; /*grow*/
+  margin-left:20px;
+  margin-top:20px; 
+  background-color:#C2C2A3;
+  height:180px;
+  width: 400px;
+  border: 8px solid rgb(21, 4, 61);
+  padding: 15px;
+  font-family:cursive;
+  font-size:20px;
+  line-height:2;
+ 
+}
+
+.fancy {
+  position: relative;
+  background-color: #C7D9AF;
+  padding: 2rem;
+  text-align: center;
+  width: 250px;
+  height: 200px;
+  margin: 5px;
+}
+
+.fancy::before {
+  content: "";
+
+  position : absolute;
+  z-index  : -1;
+  bottom   : 15px;
+  right    : 5px;
+  width    : 50%;
+  top      : 80%;
+  max-width: 200px;
+
+  box-shadow: 0px 13px 10px black;
+  transform: rotate(4deg);
+}
+
+.container2 {
+  /* display: flex; */
+  margin:30px;
+}
+
+.container2 > a > div {
+  /* flex: 1; grow */
+  margin-left:20px;
+  margin-top:20px;
+}
+
+.box h3{
+  text-align:center;
+	position:relative;
+  font-weight: bold;
+}
+.box {
+	width:300px;
+	height:250px;
+	background:#C7D9AF;
+	margin:40px auto;
+}
+
+.effect1{
+	-webkit-box-shadow: 0 10px 6px -6px #777;
+	   -moz-box-shadow: 0 10px 6px -6px #777;
+	        box-shadow: 0 10px 6px -6px #777;
+}
+
+.menuButtons{
+  padding: 80px;
+  margin-top: 40px;
+}
+
+.editTaskClass{
+  padding:0px 100px;
+  /* background-color:black; */
+}
+
+#canvas1{
+  background-color: #F5F5F5;
+}
+
+.card {
+  background: #CEDBD3;
+  border-radius: 2px;
+  display: inline-block;
+  height: 300px;
+  margin: 1rem;
+  position: relative;
+  width: 500px;
+}
+
+.card-1 {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.card-1:hover {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.card2 {
+  background: #D0D4E6;
+  border-radius: 2px;
+  display: inline-block;
+  height: 450px;
+  margin: 1rem;
+  position: relative;
+  width: 300px;
+}
+
+.card2 > h4, .card2 > p{
+  color: #1B3996;
+}
